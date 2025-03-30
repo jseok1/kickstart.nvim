@@ -90,6 +90,28 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Write to file quickly
+vim.api.nvim_set_keymap('n', '<Leader>w', ':w!<CR>', { noremap = true, silent = true })
+
+-- Edit Neovim configuration file
+vim.api.nvim_set_keymap('n', '<Leader>ve', ':e $MYVIMRC<CR>', { noremap = true, silent = true })
+
+-- Source (reload) Neovim configuration file
+vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
+
+-- Switch between .cpp and .hpp files
+vim.api.nvim_set_keymap('n', '<Leader>hh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
+
+-- This works because we escape the hash symbol to add make a bash comment
+-- the comment doesn't do anything but vim picks it up in the name of the terminal
+vim.api.nvim_create_user_command('NamedTerminal', function(opts)
+  vim.cmd('terminal bash \\#' .. opts.args)
+end, { nargs = 1 })
+
+-- Map nt to the NamedTerminal command
+vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'open a terminal with a specified name', noremap = true, silent = false })
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
