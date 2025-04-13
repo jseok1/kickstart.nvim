@@ -99,7 +99,7 @@ vim.api.nvim_set_keymap('n', '<Leader>ve', ':e $MYVIMRC<CR>', { noremap = true, 
 -- Source (reload) Neovim configuration file
 vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
 
--- Switch between .cpp and .hpp files
+-- Switch between .cpp and .hpp files (custom)
 vim.api.nvim_set_keymap('n', '<Leader>hh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
 
@@ -109,11 +109,11 @@ vim.api.nvim_create_user_command('NamedTerminal', function(opts)
   vim.cmd('terminal bash \\#' .. opts.args)
 end, { nargs = 1 })
 
--- Map nt to the NamedTerminal command
+-- Map nt to the NamedTerminal command (custom)
 vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'open a terminal with a specified name', noremap = true, silent = false })
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -937,19 +937,48 @@ require('lazy').setup({
   --   end,
   -- },
 
+  -- Gruvbox theme (custom)
   {
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require('gruvbox').setup {
+        ---@diagnostic disable-next-line: missing-fields
         italic = {
           comments = false,
           strings = false,
         },
+        contrast = 'soft',
       }
 
       vim.o.background = 'dark'
       vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
+
+  -- Line length marker (custom)
+  {
+    'lukas-reineke/virt-column.nvim',
+    opts = {
+      char = '¦', -- Or try "┊" or "¦" for different styles
+      virtcolumn = '100', -- Can be "80", "80,100", or even functions
+    },
+  },
+
+  -- Visualize file system (custom)
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }, -- optional but recommended
+    config = function()
+      require('nvim-tree').setup {
+        view = {
+          width = 35,
+          side = 'left',
+        },
+      }
+
+      vim.keymap.set('n', '<Leader>tt', ':NvimTreeToggle<CR>', { desc = '[T]oggle nvim [T]ree', noremap = true, silent = true })
     end,
   },
 
