@@ -106,11 +106,11 @@ vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, s
 -- This works because we escape the hash symbol to add make a bash comment
 -- the comment doesn't do anything but vim picks it up in the name of the terminal
 vim.api.nvim_create_user_command('NamedTerminal', function(opts)
-  vim.cmd('terminal bash \\#' .. opts.args)
+  vim.cmd('terminal zsh \\#' .. opts.args)
 end, { nargs = 1 })
 
 -- Map nt to the NamedTerminal command (custom)
-vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'open a terminal with a specified name', noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'Launch a [N]amed [Terminal]', noremap = true, silent = false })
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -426,11 +426,17 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            n = {
+              ['<c-d>'] = require('telescope.actions').delete_buffer,
+            },
+            i = {
+              ['<c-enter>'] = 'to_fuzzy_refine',
+              ['<c-d>'] = require('telescope.actions').delete_buffer,
+            },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -691,7 +697,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
