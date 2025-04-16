@@ -295,6 +295,11 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      current_line_blame = true,
+      current_line_blame_opts = {
+        delay = 300,
+        virt_text_pos = 'eol',
+      },
     },
   },
 
@@ -967,8 +972,20 @@ require('lazy').setup({
   {
     'lukas-reineke/virt-column.nvim',
     opts = {
-      char = '¦', -- Or try "┊" or "¦" for different styles
+      char = '│', -- Or try "┊" or "¦" for different styles
       virtcolumn = '100', -- Can be "80", "80,100", or even functions
+    },
+  },
+
+  -- Indent marker (custom)
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {
+      indent = { char = '│' },
+      scope = { enabled = true },
     },
   },
 
