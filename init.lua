@@ -112,6 +112,13 @@ end, { nargs = 1 })
 -- Map nt to the NamedTerminal command (custom)
 vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'Launch a [N]amed [Terminal]', noremap = true, silent = false })
 
+-- Fix the shellcmdflag and related options for MSYS2 (custom)
+if vim.o.shell:match 'bash' or vim.o.shell:match 'zsh' then
+  vim.opt.shellcmdflag = '-c'
+  vim.opt.shellquote = ''
+  vim.opt.shellxquote = ''
+end
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
