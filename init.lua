@@ -103,14 +103,18 @@ vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = t
 vim.api.nvim_set_keymap('n', '<Leader>hh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
 
--- This works because we escape the hash symbol to add make a bash comment
--- the comment doesn't do anything but vim picks it up in the name of the terminal
-vim.api.nvim_create_user_command('NamedTerminal', function(opts)
+-- Launch a fuzzy findable WSL2 terminal
+vim.api.nvim_create_user_command('LaunchWSL2', function(opts)
   vim.cmd('terminal zsh \\#' .. opts.args)
 end, { nargs = 1 })
 
--- Map nt to the NamedTerminal command (custom)
-vim.api.nvim_set_keymap('n', 'nt', ':NamedTerminal ', { desc = 'Launch a [N]amed [Terminal]', noremap = true, silent = false })
+-- Launch a fuzzy findable MSYS2 terminal
+vim.api.nvim_create_user_command('LaunchMSYS2', function(opts)
+  vim.cmd('terminal cmd.exe /K C:/msys64/msys2_shell.cmd -defterm -here -no-start -ucrt64 -shell bash \\#' .. opts.args)
+end, { nargs = 1 })
+
+vim.api.nvim_set_keymap('n', '<Leader>lw', ':LaunchWSL2', { desc = '[L]aunch [W]SL2', noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', '<Leader>lm', ':LaunchMSYS2', { desc = '[L]aunch [M]SYS2', noremap = true, silent = false })
 
 -- Fix the shellcmdflag and related options for MSYS2 (custom)
 if vim.o.shell:match 'bash' or vim.o.shell:match 'zsh' then
