@@ -99,32 +99,61 @@ vim.api.nvim_set_keymap('n', '<Leader>ve', ':e $MYVIMRC<CR>', { noremap = true, 
 -- Source (reload) Neovim configuration file
 vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
 
--- Switch between .cpp and .hpp files (custom)
+-- Disable netrw for nvim-tree (custom)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Switch between .cpp and .hpp files (custom) (NEEDS FIXING)
 vim.api.nvim_set_keymap('n', '<Leader>hh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
 
--- Launch a fuzzy findable WSL2 terminal
+-- Move selected lines up/down line-by-line (custom)
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Same as J but retain cursor position (custom)
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- Same as <C-d>/<C-u> but vertically center cursor (custom)
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Same as n/N but center vertically cursor (custom)
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Just like '*' but for find-and-replace (custom)
+vim.keymap.set('n', '<Leader>*', ':%s/\\<<C-r><C-w>\\>//gI<Left><Left><Left>')
+
+-- Press <Leader> before deleting or replacing to not yank (custom)
+vim.keymap.set('x', '<Leader>p', '"_dP') -- 'P' also does the trick since 2022
+vim.keymap.set('n', '<Leader>d', '"_d')
+vim.keymap.set('v', '<Leader>d', '"_d')
+vim.keymap.set('n', '<Leader>c', '"_c')
+vim.keymap.set('v', '<Leader>c', '"_c') -- conflicts with CODE ACTION
+-- TODO: this is gonna need work. x, p (there should just be an easy way to select a different register)
+
+-- Launch a fuzzy findable WSL2 terminal (custom)
 vim.api.nvim_create_user_command('LaunchWSL2', function(opts)
   vim.cmd('terminal zsh \\#' .. opts.args)
 end, { nargs = 1 })
 
--- Launch a fuzzy findable MSYS2 terminal
+-- Launch a fuzzy findable MSYS2 terminal (custom)
 vim.api.nvim_create_user_command('LaunchMSYS2', function(opts)
   vim.cmd('terminal cmd.exe /K C:/msys64/msys2_shell.cmd -defterm -here -no-start -ucrt64 -shell bash \\#' .. opts.args)
 end, { nargs = 1 })
 
-vim.api.nvim_set_keymap('n', '<Leader>lw', ':LaunchWSL2', { desc = '[L]aunch [W]SL2', noremap = true, silent = false })
-vim.api.nvim_set_keymap('n', '<Leader>lm', ':LaunchMSYS2', { desc = '[L]aunch [M]SYS2', noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', '<Leader>lw', ':LaunchWSL2 ', { desc = '[L]aunch [W]SL2', noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', '<Leader>lm', ':LaunchMSYS2 ', { desc = '[L]aunch [M]SYS2', noremap = true, silent = false })
 
--- Fix the shellcmdflag and related options for MSYS2 (custom)
-if vim.o.shell:match 'bash' or vim.o.shell:match 'zsh' then
-  vim.opt.shellcmdflag = '-c'
-  vim.opt.shellquote = ''
-  vim.opt.shellxquote = ''
-end
+-- Disable line wrapping (custom)
+vim.opt.wrap = false
+
+-- Enable 24-bit colour (custom)
+vim.opt.termguicolors = true
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
+vim.g.have_nerd_font = false
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -135,7 +164,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -300,16 +329,11 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-      current_line_blame = true,
-      current_line_blame_opts = {
-        delay = 300,
-        virt_text_pos = 'eol',
+        add = { text = '┃' },
+        change = { text = '┃' },
+        delete = { text = '▁' },
+        topdelete = { text = '▔' },
+        changedelete = { text = '┃' },
       },
     },
   },
@@ -675,10 +699,10 @@ require('lazy').setup({
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = vim.g.have_nerd_font and {
           text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
+            [vim.diagnostic.severity.ERROR] = ' ',
+            [vim.diagnostic.severity.WARN] = ' ',
+            [vim.diagnostic.severity.INFO] = ' ',
+            [vim.diagnostic.severity.HINT] = '󰌵 ',
           },
         } or {},
         virtual_text = {
@@ -1000,7 +1024,7 @@ require('lazy').setup({
     },
   },
 
-  -- Visualize file system (custom)
+  -- Display sidebar (custom)
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' }, -- optional but recommended
@@ -1008,11 +1032,102 @@ require('lazy').setup({
       require('nvim-tree').setup {
         view = {
           width = 35,
-          side = 'left',
+        },
+        renderer = {
+          root_folder_label = false,
+          add_trailing = true,
+          icons = {
+            show = {
+              file = false,
+              folder = false,
+              folder_arrow = false,
+            },
+          },
         },
       }
 
       vim.keymap.set('n', '<Leader>tt', ':NvimTreeToggle<CR>', { desc = '[T]oggle nvim [T]ree', noremap = true, silent = true })
+    end,
+  },
+
+  -- Customize statusbar (custom)
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      -- modified from https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_dark.lua
+      local colors = {
+        black = '#282828',
+        white = '#ebdbb2',
+        red = '#fb4934',
+        green = '#b8bb26',
+        blue = '#83a598',
+        yellow = '#fe8019',
+        gray = '#a89984',
+        darkgray = '#3c3836',
+        lightgray = '#504945',
+        inactivegray = '#7c6f64',
+      }
+
+      -- retain same colors across modes
+      local gruvbox = {
+        normal = {
+          a = { bg = colors.gray, fg = colors.black, gui = 'bold' },
+          b = { bg = colors.lightgray, fg = colors.white },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+        insert = {
+          a = { bg = colors.blue, fg = colors.black, gui = 'bold' },
+          b = { bg = colors.lightgray, fg = colors.white },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+        visual = {
+          a = { bg = colors.yellow, fg = colors.black, gui = 'bold' },
+          b = { bg = colors.lightgray, fg = colors.white },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+        replace = {
+          a = { bg = colors.red, fg = colors.black, gui = 'bold' },
+          b = { bg = colors.lightgray, fg = colors.white },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+        command = {
+          a = { bg = colors.green, fg = colors.black, gui = 'bold' },
+          b = { bg = colors.lightgray, fg = colors.white },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+        inactive = {
+          a = { bg = colors.darkgray, fg = colors.gray, gui = 'bold' },
+          b = { bg = colors.darkgray, fg = colors.gray },
+          c = { bg = colors.darkgray, fg = colors.gray },
+        },
+      }
+
+      require('lualine').setup {
+        options = {
+          icons_enabled = false,
+          theme = gruvbox,
+          section_separators = { left = '', right = '' },
+          component_separators = '',
+          globalstatus = true,
+          symbols = { newfile = '[No Name]' },
+        },
+        sections = {
+          lualine_b = {
+            'branch',
+            'diff',
+            {
+              'diagnostics',
+              symbols = vim.g.have_nerd_font and {
+                text = { error = ' ', warn = ' ', info = ' ', hint = '󰌵 ' },
+              } or {},
+            },
+          },
+        },
+        extensions = {
+          'nvim-tree',
+        },
+      }
     end,
   },
 
@@ -1062,7 +1177,27 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'cpp',
+        'cmake',
+        'glsl',
+        'python',
+        'javascript',
+        'typescript',
+        'html',
+        'css',
+        'svelte',
+        'diff',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
