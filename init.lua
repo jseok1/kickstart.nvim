@@ -103,9 +103,9 @@ vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = t
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Switch between .cpp and .hpp files (custom) (NEEDS FIXING)
-vim.api.nvim_set_keymap('n', '<Leader>hh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>cc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
+-- Switch between .cpp and .hpp (custom) (NEEDS FIXING)
+-- vim.api.nvim_set_keymap('n', '<Leader>gh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<Leader>gc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
 
 -- Move selected lines up/down line-by-line (custom)
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -125,13 +125,14 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 -- Just like '*' but for find-and-replace (custom)
 vim.keymap.set('n', '<Leader>*', ':%s/\\<<C-r><C-w>\\>//gI<Left><Left><Left>')
 
--- Press <Leader> before deleting or replacing to not yank (custom)
-vim.keymap.set('x', '<Leader>p', '"_dP') -- 'P' also does the trick since 2022
+-- It would be good to add a keymap for starting an exact search. And case-sensitive.
+-- Maybe <Leader>/ (although this replaces telescope)
+
+-- Press <Leader> before deleting or pasting to not yank into the default register (custom)
+vim.keymap.set('x', '<Leader>p', '"_dP')
 vim.keymap.set('n', '<Leader>d', '"_d')
 vim.keymap.set('v', '<Leader>d', '"_d')
-vim.keymap.set('n', '<Leader>c', '"_c')
-vim.keymap.set('v', '<Leader>c', '"_c') -- conflicts with CODE ACTION
--- TODO: this is gonna need work. x, p (there should just be an easy way to select a different register)
+vim.keymap.set('n', '<Leader>x', '"_x')
 
 -- Launch a fuzzy findable WSL2 terminal (custom)
 vim.api.nvim_create_user_command('LaunchWSL2', function(opts)
@@ -151,6 +152,27 @@ vim.opt.wrap = false
 
 -- Enable 24-bit colour (custom)
 vim.opt.termguicolors = true
+
+-- Disable 'r' and 'R' in normal, visual, visual block, and operator-pending modes (custom)
+vim.keymap.set('n', 'r', '<Nop>')
+vim.keymap.set('v', 'r', '<Nop>')
+vim.keymap.set('x', 'r', '<Nop>')
+vim.keymap.set('o', 'r', '<Nop>')
+vim.keymap.set('n', 'R', '<Nop>')
+vim.keymap.set('v', 'R', '<Nop>')
+vim.keymap.set('x', 'R', '<Nop>')
+vim.keymap.set('o', 'R', '<Nop>')
+
+-- Disable 's' and 'S' in normal, visual, visual block, and operator-pending modes (custom)
+-- These are synonyms for 'cl' and 'cc' anyway.
+vim.keymap.set('n', 's', '<Nop>')
+vim.keymap.set('v', 's', '<Nop>')
+vim.keymap.set('x', 's', '<Nop>')
+vim.keymap.set('o', 's', '<Nop>')
+vim.keymap.set('n', 'S', '<Nop>')
+vim.keymap.set('v', 'S', '<Nop>')
+vim.keymap.set('x', 'S', '<Nop>')
+vim.keymap.set('o', 'S', '<Nop>')
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
@@ -983,23 +1005,48 @@ require('lazy').setup({
   --   end,
   -- },
 
-  -- Gruvbox theme (custom)
+  -- {
+  --   'ellisonleao/gruvbox.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     ---@diagnostic disable-next-line: missing-fields
+  --     require('gruvbox').setup {
+  --       ---@diagnostic disable-next-line: missing-fields
+  --       italic = {
+  --         comments = false,
+  --         strings = false,
+  --       },
+  --       contrast = 'soft',
+  --     }
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'gruvbox'
+  --   end,
+  -- },
+
+  -- {
+  --   'sainnhe/gruvbox-material',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.gruvbox_material_background = 'soft'
+  --     vim.g.gruvbox_material_enable_italic = false
+  --     vim.g.gruvbox_material_disable_italic_comment = true
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
+
   {
-    'ellisonleao/gruvbox.nvim',
+    'sainnhe/everforest',
     priority = 1000,
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('gruvbox').setup {
-        ---@diagnostic disable-next-line: missing-fields
-        italic = {
-          comments = false,
-          strings = false,
-        },
-        contrast = 'soft',
-      }
+      vim.g.everforest_background = 'soft'
+      vim.g.everforest_enable_italic = false
+      vim.g.everforest_disable_italic_comment = true
 
       vim.o.background = 'dark'
-      vim.cmd.colorscheme 'gruvbox'
+      vim.cmd.colorscheme 'everforest'
     end,
   },
 
@@ -1055,58 +1102,10 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      -- modified from https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_dark.lua
-      local colors = {
-        black = '#282828',
-        white = '#ebdbb2',
-        red = '#fb4934',
-        green = '#b8bb26',
-        blue = '#83a598',
-        yellow = '#fe8019',
-        gray = '#a89984',
-        darkgray = '#3c3836',
-        lightgray = '#504945',
-        inactivegray = '#7c6f64',
-      }
-
-      -- retain same colors across modes
-      local gruvbox = {
-        normal = {
-          a = { bg = colors.gray, fg = colors.black, gui = 'bold' },
-          b = { bg = colors.lightgray, fg = colors.white },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-        insert = {
-          a = { bg = colors.blue, fg = colors.black, gui = 'bold' },
-          b = { bg = colors.lightgray, fg = colors.white },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-        visual = {
-          a = { bg = colors.yellow, fg = colors.black, gui = 'bold' },
-          b = { bg = colors.lightgray, fg = colors.white },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-        replace = {
-          a = { bg = colors.red, fg = colors.black, gui = 'bold' },
-          b = { bg = colors.lightgray, fg = colors.white },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-        command = {
-          a = { bg = colors.green, fg = colors.black, gui = 'bold' },
-          b = { bg = colors.lightgray, fg = colors.white },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-        inactive = {
-          a = { bg = colors.darkgray, fg = colors.gray, gui = 'bold' },
-          b = { bg = colors.darkgray, fg = colors.gray },
-          c = { bg = colors.darkgray, fg = colors.gray },
-        },
-      }
-
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = gruvbox,
+          theme = 'everforest', -- gruvbox-material
           section_separators = { left = '', right = '' },
           component_separators = '',
           globalstatus = true,
@@ -1131,7 +1130,6 @@ require('lazy').setup({
     end,
   },
 
-  -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
@@ -1152,20 +1150,22 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- << REPLACED WITH LUALINE >>
+      -- -- Simple and easy statusline.
+      -- --  You could remove this setup call if you don't like it,
+      -- --  and try some other statusline plugin
+      -- local statusline = require 'mini.statusline'
+      -- -- set use_icons to true if you have a Nerd Font
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
+      --
+      -- -- You can configure sections in the statusline by overriding their
+      -- -- default behavior. For example, here we set the section for
+      -- -- cursor location to LINE:COLUMN
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
+      -- << REPLACED WITH LUALINE >>
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
