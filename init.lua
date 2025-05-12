@@ -153,6 +153,12 @@ vim.opt.wrap = false
 -- Enable 24-bit colour (custom)
 vim.opt.termguicolors = true
 
+-- Use spaces instead of tabs (custom)
+vim.opt.expandtab = true
+
+-- Enable smart indenting for C-style languages (custom)
+vim.opt.cindent = true
+
 -- Disable 'r' and 'R' in normal, visual, visual block, and operator-pending modes (custom)
 vim.keymap.set('n', 'r', '<Nop>')
 vim.keymap.set('v', 'r', '<Nop>')
@@ -759,7 +765,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        -- clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -786,6 +792,9 @@ require('lazy').setup({
             },
           },
         },
+        clangd = {},
+        ts_ls = {},
+        svelte = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -804,6 +813,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettierd',
+        'prettier',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -844,7 +855,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -861,6 +872,22 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+
+        -- Using clangd automatically associates clang-format with c and cpp.
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        -- NOTE: Need to run `npm i --save-dev prettier prettier-plugin-svelte` in project.
+        --  And configure .prettierrc with prettier-plugin-svelte.
+        --  {
+        --    "plugins": ["prettier-plugin-svelte"],
+        --    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
+        --  }
+        svelte = { 'prettier-plugin-svelte' },
       },
     },
   },
@@ -1087,9 +1114,11 @@ require('lazy').setup({
             show = {
               file = false,
               folder = false,
-              folder_arrow = false,
             },
           },
+        },
+        filters = {
+          git_ignored = false,
         },
       }
 
