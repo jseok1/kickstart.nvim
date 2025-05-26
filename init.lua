@@ -1122,7 +1122,7 @@ require('lazy').setup({
         },
       }
 
-      vim.keymap.set('n', '<Leader>tt', ':NvimTreeToggle<CR>', { desc = '[T]oggle nvim [T]ree', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>tt', '<cmd>NvimTreeToggle<CR>', { desc = '[T]oggle nvim [T]ree', noremap = true, silent = true })
     end,
   },
 
@@ -1176,6 +1176,16 @@ require('lazy').setup({
       { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
       { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
+  },
+
+  -- Preview colors (custom)
+  {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
+
+      vim.keymap.set('n', '<Leader>tc', '<cmd>ColorizerToggle<CR>', { desc = '[T]oggle nvim [C]olorizer', noremap = true, silent = true })
+    end,
   },
 
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
