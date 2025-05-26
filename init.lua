@@ -134,6 +134,10 @@ vim.keymap.set('n', '<Leader>d', '"_d')
 vim.keymap.set('v', '<Leader>d', '"_d')
 vim.keymap.set('n', '<Leader>x', '"_x')
 
+-- Use '-' and '|' for horizontal and vertical splits (custom)
+vim.api.nvim_set_keymap('n', '<Leader>-', '<cmd>split<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>|', '<cmd>vsplit<CR>', { noremap = true, silent = true })
+
 -- Launch a fuzzy findable WSL2 terminal (custom)
 vim.api.nvim_create_user_command('LaunchWSL2', function(opts)
   vim.cmd('terminal zsh \\#' .. opts.args)
