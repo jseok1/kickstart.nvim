@@ -344,31 +344,52 @@ require('lazy').setup({
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
-  --    {
-  --        'lewis6991/gitsigns.nvim',
-  --        config = function()
-  --            require('gitsigns').setup({
-  --                -- Your gitsigns configuration here
-  --            })
-  --        end,
-  --    }
+  {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup {
+        signs = {
+          change = { text = '┃' },
+          add = { text = '┃' },
+          delete = { text = '▁' },
+          topdelete = { text = '▔' },
+          changedelete = { text = '┃' },
+        },
+        signs_staged = {
+          add = { text = '┃' },
+          change = { text = '┃' },
+          delete = { text = '▁' },
+          topdelete = { text = '▔' },
+          changedelete = { text = '┃' },
+          untracked = { text = '┆' },
+        },
+        current_line_blame_opts = {
+          delay = 500,
+        },
+      }
+
+      vim.keymap.set('n', '<Leader>gd', '<cmd>Gitsigns preview_hunk_inline<CR>', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>gr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[G]it [R]eset hunk', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>gb', '<cmd>Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame line', noremap = true, silent = true })
+    end,
+  },
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '┃' },
-        change = { text = '┃' },
-        delete = { text = '▁' },
-        topdelete = { text = '▔' },
-        changedelete = { text = '┃' },
-      },
-    },
-  },
+  -- { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  --   'lewis6991/gitsigns.nvim',
+  --   opts = {
+  --     signs = {
+  --       add = { text = '┃' },
+  --       change = { text = '┃' },
+  --       delete = { text = '▁' },
+  --       topdelete = { text = '▔' },
+  --       changedelete = { text = '┃' },
+  --     },
+  --   },
+  -- },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
