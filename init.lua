@@ -103,6 +103,9 @@ vim.api.nvim_set_keymap('n', '<Leader>vs', ':source $MYVIMRC<CR>', { noremap = t
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- For 'gq' (custom)
+vim.opt.textwidth = 100
+
 -- Switch between .cpp and .hpp (custom) (NEEDS FIXING)
 -- vim.api.nvim_set_keymap('n', '<Leader>gh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('n', '<Leader>gc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
@@ -1213,6 +1216,21 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'lervag/vimtex',
+    lazy = false, -- VimTeX is already lazy loaded
+    config = function()
+      vim.g.vimtex_view_method = 'zathura'
+      vim.g.vimtex_compiler_method = 'latexmk'
+      vim.g.vimtex_compiler_latexmk = {
+        aux_dir = 'build',
+        out_dir = 'build',
+      }
+
+      -- vim.keymap.set('n', '<Leader>p', '<cmd>!zathura <C-r>=expand("%:r")<CR>.pdf $<CR>')
+    end,
+  },
+
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
@@ -1281,6 +1299,7 @@ require('lazy').setup({
         'vim',
         'vimdoc',
       },
+      ignore_install = { 'latex' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
