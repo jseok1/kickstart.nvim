@@ -1060,50 +1060,32 @@ require('lazy').setup({
   --   end,
   -- },
 
-  -- {
-  --   'ellisonleao/gruvbox.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('gruvbox').setup {
-  --       ---@diagnostic disable-next-line: missing-fields
-  --       italic = {
-  --         comments = false,
-  --         strings = false,
-  --       },
-  --       contrast = 'soft',
-  --     }
-  --
-  --     vim.o.background = 'dark'
-  --     vim.cmd.colorscheme 'gruvbox'
-  --   end,
-  -- },
-
-  -- {
-  --   'sainnhe/gruvbox-material',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.gruvbox_material_background = 'soft'
-  --     vim.g.gruvbox_material_enable_italic = false
-  --     vim.g.gruvbox_material_disable_italic_comment = true
-  --
-  --     vim.o.background = 'dark'
-  --     vim.cmd.colorscheme 'gruvbox-material'
-  --   end,
-  -- },
-
   {
-    'sainnhe/everforest',
+    'sainnhe/gruvbox-material',
     priority = 1000,
     config = function()
-      vim.g.everforest_background = 'soft'
-      vim.g.everforest_enable_italic = false
-      vim.g.everforest_disable_italic_comment = true
+      vim.g.gruvbox_material_background = 'soft'
+      vim.g.gruvbox_material_enable_italic = false
+      vim.g.gruvbox_material_disable_italic_comment = true
+      vim.g.gruvbox_material_visual = 'green background'
 
       vim.o.background = 'dark'
-      vim.cmd.colorscheme 'everforest'
+      vim.cmd.colorscheme 'gruvbox-material'
     end,
   },
+
+  -- {
+  --   'sainnhe/everforest',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.everforest_background = 'soft'
+  --     vim.g.everforest_enable_italic = false
+  --     vim.g.everforest_disable_italic_comment = true
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'everforest'
+  --   end,
+  -- },
 
   -- Line length marker (custom)
   {
@@ -1162,7 +1144,7 @@ require('lazy').setup({
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = 'everforest', -- gruvbox-material
+          theme = 'gruvbox-material', -- everforest
           section_separators = { left = '', right = '' },
           component_separators = ' ',
           globalstatus = true,
