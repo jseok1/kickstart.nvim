@@ -821,6 +821,7 @@ require('lazy').setup({
           },
         },
         clangd = {},
+        pyright = {},
         ts_ls = {},
         svelte = {},
       }
@@ -1060,19 +1061,19 @@ require('lazy').setup({
   --   end,
   -- },
 
-  {
-    'sainnhe/gruvbox-material',
-    priority = 1000,
-    config = function()
-      vim.g.gruvbox_material_background = 'soft'
-      vim.g.gruvbox_material_enable_italic = false
-      vim.g.gruvbox_material_disable_italic_comment = true
-      vim.g.gruvbox_material_visual = 'green background'
-
-      vim.o.background = 'dark'
-      vim.cmd.colorscheme 'gruvbox-material'
-    end,
-  },
+  -- {
+  --   'sainnhe/gruvbox-material',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.gruvbox_material_background = 'soft'
+  --     vim.g.gruvbox_material_enable_italic = false
+  --     vim.g.gruvbox_material_disable_italic_comment = true
+  --     vim.g.gruvbox_material_visual = 'green background'
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
 
   -- {
   --   'sainnhe/everforest',
@@ -1084,6 +1085,44 @@ require('lazy').setup({
   --
   --     vim.o.background = 'dark'
   --     vim.cmd.colorscheme 'everforest'
+  --   end,
+  -- },
+
+  {
+    'gbprod/nord.nvim',
+    priority = 1000,
+    config = function()
+      -- require('nord').setup {
+      --   styles = {
+      --     italic = false,
+      --     -- Style to be applied to different syntax groups
+      --     -- Value is any valid attr-list value for `:help nvim_set_hl`
+      --     comments = { italic = false },
+      --     keywords = { italic = false },
+      --     functions = {},
+      --     variables = {},
+      --
+      --     -- To customize lualine/bufferline
+      --     bufferline = {
+      --       current = {},
+      --       modified = { italic = true },
+      --     },
+      --   },
+      -- }
+
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme 'nord'
+    end,
+  },
+
+  -- {
+  --   'shaunsingh/nord.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.nord_italic = false
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'nord'
   --   end,
   -- },
 
@@ -1144,7 +1183,7 @@ require('lazy').setup({
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = 'gruvbox-material', -- everforest
+          theme = 'nord', -- everforest, gruvbox-material
           section_separators = { left = '', right = '' },
           component_separators = ' ',
           globalstatus = true,
@@ -1181,8 +1220,8 @@ require('lazy').setup({
     },
     keys = {
       { '<c-h>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
-      { '<c-j>', '<cmd><C-U>TmuxNavigateDown<cr>' },
-      { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-j>', '<cmd><C-U>TmuxNavigat"Down<cr>' },
+      { '<c-k>', '<cmd><C-U>TmuxNavigat"Up<cr>' },
       { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
       { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
@@ -1196,6 +1235,26 @@ require('lazy').setup({
 
       vim.keymap.set('n', '<Leader>tc', '<cmd>ColorizerToggle<CR>', { desc = '[T]oggle nvim [C]olorizer', noremap = true, silent = true })
     end,
+  },
+
+  {
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    ---@type Flash.Config
+    opts = {
+      highlight = {
+        backdrop = false,
+      },
+      modes = {
+        char = {
+          enabled = false,
+        },
+      },
+    },
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+    },
   },
 
   {
@@ -1231,7 +1290,19 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      require('mini.surround').setup {
+        mappings = {
+          -- - raiw) - w[R]ap [A]dd [I]nner [W]ord [)]Paren
+          -- - rd'   - w[R]ap [D]elete [']quotes
+          -- - rr)'  - w[R]ap [R]eplace [)] [']
+          add = 'ra', -- Add surrounding in Normal and Visual modes
+          delete = 'rd', -- Delete surrounding
+          find = 'rf', -- Find surrounding (to the right)
+          find_left = 'rF', -- Find surrounding (to the left)
+          highlight = 'rh', -- Highlight surrounding
+          replace = 'rr', -- Replace surrounding
+        },
+      }
 
       -- << REPLACED WITH LUALINE >>
       -- -- Simple and easy statusline.
