@@ -136,6 +136,9 @@ vim.keymap.set('x', '<Leader>p', '"_dP')
 vim.keymap.set('n', '<Leader>d', '"_d')
 vim.keymap.set('v', '<Leader>d', '"_d')
 vim.keymap.set('n', '<Leader>x', '"_x')
+vim.keymap.set('v', '<Leader>x', '"_x')
+vim.keymap.set('n', '<Leader>c', '"_c')
+vim.keymap.set('v', '<Leader>c', '"_c')
 
 -- Use '-' and '|' for horizontal and vertical splits (custom)
 vim.api.nvim_set_keymap('n', '<Leader>-', '<cmd>split<CR>', { noremap = true, silent = true })
@@ -369,11 +372,34 @@ require('lazy').setup({
         current_line_blame_opts = {
           delay = 500,
         },
+        preview_config = {
+          border = 'rounded',
+        },
       }
 
-      vim.keymap.set('n', '<Leader>gd', '<cmd>Gitsigns preview_hunk_inline<CR>', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>gd', '<cmd>Gitsigns preview_hunk<CR><C-w>wj', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[G]it [R]eset hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gb', '<cmd>Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame line', noremap = true, silent = true })
+
+      vim.keymap.set('n', ']c', function()
+        if vim.wo.diff then
+          return ']c'
+        end
+        vim.schedule(function()
+          package.loaded.gitsigns.next_hunk()
+        end)
+        return '<Ignore>'
+      end, { desc = 'Jump to next Git hunk', expr = true })
+
+      vim.keymap.set('n', '[c', function()
+        if vim.wo.diff then
+          return '[c'
+        end
+        vim.schedule(function()
+          package.loaded.gitsigns.prev_hunk()
+        end)
+        return '<Ignore>'
+      end, { desc = 'Jump to previous Git hunk', expr = true })
     end,
   },
   --
@@ -687,7 +713,7 @@ require('lazy').setup({
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+          map('<leader>$', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -1089,42 +1115,16 @@ require('lazy').setup({
   -- },
 
   {
-    'gbprod/nord.nvim',
+    'shaunsingh/nord.nvim',
     priority = 1000,
     config = function()
-      -- require('nord').setup {
-      --   styles = {
-      --     italic = false,
-      --     -- Style to be applied to different syntax groups
-      --     -- Value is any valid attr-list value for `:help nvim_set_hl`
-      --     comments = { italic = false },
-      --     keywords = { italic = false },
-      --     functions = {},
-      --     variables = {},
-      --
-      --     -- To customize lualine/bufferline
-      --     bufferline = {
-      --       current = {},
-      --       modified = { italic = true },
-      --     },
-      --   },
-      -- }
+      vim.g.nord_italic = false
+      vim.g.nord_bold = false
 
       vim.o.background = 'dark'
       vim.cmd.colorscheme 'nord'
     end,
   },
-
-  -- {
-  --   'shaunsingh/nord.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.nord_italic = false
-  --
-  --     vim.o.background = 'dark'
-  --     vim.cmd.colorscheme 'nord'
-  --   end,
-  -- },
 
   -- Line length marker (custom)
   {
@@ -1292,15 +1292,12 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup {
         mappings = {
-          -- - raiw) - w[R]ap [A]dd [I]nner [W]ord [)]Paren
-          -- - rd'   - w[R]ap [D]elete [']quotes
-          -- - rr)'  - w[R]ap [R]eplace [)] [']
-          add = 'ra', -- Add surrounding in Normal and Visual modes
-          delete = 'rd', -- Delete surrounding
-          find = 'rf', -- Find surrounding (to the right)
-          find_left = 'rF', -- Find surrounding (to the left)
-          highlight = 'rh', -- Highlight surrounding
-          replace = 'rr', -- Replace surrounding
+          add = 'ra', -- w[R]ap [A]dd
+          delete = 'rd', -- w[R]ap [D]elete
+          replace = 'rr', -- w[R]ap [R]eplace
+          find = 'rf', -- w[R]ap [F]ind (to the right)
+          find_left = 'rF', -- w[R]ap [F]ind (to the left)
+          highlight = 'rh', -- w[R]ap [H]ighlight
         },
       }
 
