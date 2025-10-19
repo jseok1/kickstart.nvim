@@ -1157,12 +1157,14 @@ require('lazy').setup({
           width = 35,
         },
         renderer = {
+          highlight_git = true,
           root_folder_label = false,
           add_trailing = true,
           icons = {
             show = {
               file = false,
               folder = false,
+              git = false,
             },
           },
         },
