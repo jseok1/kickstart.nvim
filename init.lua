@@ -873,6 +873,8 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'prettierd',
         'prettier',
+        'ruff',
+        'ruff-lsp',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -945,7 +947,8 @@ require('lazy').setup({
         --    "plugins": ["prettier-plugin-svelte"],
         --    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
         --  }
-        svelte = { 'prettier-plugin-svelte' },
+        svelte = { 'prettier-plugin-svelte', stop_after_first = true },
+        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
       },
     },
   },
