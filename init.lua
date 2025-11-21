@@ -271,6 +271,9 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- View diagnostic message in a floating window, instead of as virtual text (custom)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostics in floating window' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -377,7 +380,7 @@ require('lazy').setup({
         },
       }
 
-      vim.keymap.set('n', '<Leader>gd', '<cmd>Gitsigns preview_hunk<CR><C-w>wj', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>gp', '<cmd>Gitsigns preview_hunk<CR><C-w>wj', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[G]it [R]eset hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gb', '<cmd>Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame line', noremap = true, silent = true })
 
