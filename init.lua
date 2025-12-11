@@ -386,7 +386,7 @@ require('lazy').setup({
         },
       }
 
-      vim.keymap.set('n', '<Leader>gp', '<cmd>Gitsigns preview_hunk<CR><C-w>wj', { desc = '[G]it [D]iff hunk', noremap = true, silent = true })
+      vim.keymap.set('n', '<Leader>gp', '<cmd>Gitsigns preview_hunk<CR><C-w>wj', { desc = '[G]it [P]review hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gr', '<cmd>Gitsigns reset_hunk<CR>', { desc = '[G]it [R]eset hunk', noremap = true, silent = true })
       vim.keymap.set('n', '<Leader>gb', '<cmd>Gitsigns toggle_current_line_blame<CR>', { desc = '[G]it [B]lame line', noremap = true, silent = true })
 
@@ -409,6 +409,13 @@ require('lazy').setup({
         end)
         return '<Ignore>'
       end, { desc = 'Jump to previous Git hunk', expr = true })
+
+      vim.api.nvim_create_autocmd('FocusGained', {
+        callback = function()
+          -- Does this do anything?
+          -- require('gitsigns').refresh()
+        end,
+      })
     end,
   },
   --
@@ -1186,6 +1193,12 @@ require('lazy').setup({
       }
 
       vim.keymap.set('n', '<Leader>tt', '<cmd>NvimTreeToggle<CR>', { desc = '[T]oggle nvim [T]ree', noremap = true, silent = true })
+
+      vim.api.nvim_create_autocmd('FocusGained', {
+        callback = function()
+          require('nvim-tree.api').tree.reload()
+        end,
+      })
     end,
   },
 
