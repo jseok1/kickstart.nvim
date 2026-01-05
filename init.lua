@@ -1133,15 +1133,30 @@ require('lazy').setup({
   --   end,
   -- },
 
+  -- {
+  --   'shaunsingh/nord.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.nord_italic = false
+  --     vim.g.nord_bold = false
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'nord'
+  --   end,
+  -- },
+
   {
-    'shaunsingh/nord.nvim',
+    'catppuccin/nvim',
     priority = 1000,
     config = function()
-      vim.g.nord_italic = false
-      vim.g.nord_bold = false
+      require('catppuccin').setup {
+        flavour = 'frappe',
+        no_italic = true,
+        no_bold = true,
+        no_underline = true,
+      }
 
-      vim.o.background = 'dark'
-      vim.cmd.colorscheme 'nord'
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
 
@@ -1210,7 +1225,7 @@ require('lazy').setup({
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = 'nord', -- everforest, gruvbox-material
+          theme = 'catppuccin', -- nord, everforest, gruvbox-material
           section_separators = { left = '', right = '' },
           component_separators = ' ',
           globalstatus = true,
