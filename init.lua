@@ -106,10 +106,6 @@ vim.g.loaded_netrwPlugin = 1
 -- For 'gq' (custom)
 vim.opt.textwidth = 100
 
--- Switch between .cpp and .hpp (custom) (NEEDS FIXING)
--- vim.api.nvim_set_keymap('n', '<Leader>gh', ':e %:r.hpp<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap('n', '<Leader>gc', ':e %:r.cpp<CR>', { noremap = true, silent = true })
-
 -- Move selected lines up/down line-by-line (custom)
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -126,13 +122,11 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Just like '*' but for find-and-replace (custom)
-vim.keymap.set('n', '<Leader>*', ':%s/\\<<C-r><C-w>\\>//gI<Left><Left><Left>')
-
--- It would be good to add a keymap for starting an exact search. And case-sensitive.
--- Maybe <Leader>/ (although this replaces telescope)
+vim.keymap.set('n', '<Leader>*', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]])
+vim.keymap.set('v', '<Leader>*', [["hy:%s/\V<C-r>h//g<Left><Left>]]) -- yank into h register
 
 -- Press <Leader> before deleting or pasting to not yank into the default register (custom)
-vim.keymap.set('x', '<Leader>p', '"_dP')
+vim.keymap.set('x', '<Leader>p', 'P')
 vim.keymap.set('n', '<Leader>d', '"_d')
 vim.keymap.set('v', '<Leader>d', '"_d')
 vim.keymap.set('n', '<Leader>x', '"_x')
@@ -1106,19 +1100,19 @@ require('lazy').setup({
   --   end,
   -- },
 
-  -- {
-  --   'sainnhe/gruvbox-material',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.gruvbox_material_background = 'soft'
-  --     vim.g.gruvbox_material_enable_italic = false
-  --     vim.g.gruvbox_material_disable_italic_comment = true
-  --     vim.g.gruvbox_material_visual = 'green background'
-  --
-  --     vim.o.background = 'dark'
-  --     vim.cmd.colorscheme 'gruvbox-material'
-  --   end,
-  -- },
+  {
+    'sainnhe/gruvbox-material',
+    priority = 1000,
+    config = function()
+      vim.g.gruvbox_material_background = 'soft'
+      vim.g.gruvbox_material_enable_italic = false
+      vim.g.gruvbox_material_disable_italic_comment = true
+      vim.g.gruvbox_material_visual = 'green background'
+
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme 'gruvbox-material'
+    end,
+  },
 
   -- {
   --   'sainnhe/everforest',
@@ -1145,20 +1139,20 @@ require('lazy').setup({
   --   end,
   -- },
 
-  {
-    'catppuccin/nvim',
-    priority = 1000,
-    config = function()
-      require('catppuccin').setup {
-        flavour = 'frappe',
-        no_italic = true,
-        no_bold = true,
-        no_underline = true,
-      }
-
-      vim.cmd.colorscheme 'catppuccin'
-    end,
-  },
+  -- {
+  --   'catppuccin/nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     require('catppuccin').setup {
+  --       flavour = 'frappe',
+  --       no_italic = true,
+  --       no_bold = true,
+  --       no_underline = true,
+  --     }
+  --
+  --     vim.cmd.colorscheme 'catppuccin'
+  --   end,
+  -- },
 
   -- Line length marker (custom)
   {
@@ -1225,7 +1219,7 @@ require('lazy').setup({
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = 'catppuccin', -- nord, everforest, gruvbox-material
+          theme = 'gruvbox-material', -- nord, everforest, gruvbox-material
           section_separators = { left = '', right = '' },
           component_separators = ' ',
           globalstatus = true,
@@ -1340,6 +1334,7 @@ require('lazy').setup({
           find = 'rf', -- w[R]ap [F]ind (to the right)
           find_left = 'rF', -- w[R]ap [F]ind (to the left)
           highlight = 'rh', -- w[R]ap [H]ighlight
+          update_n_lines = 'rn', -- Update `MiniSurround.config.n_lines`
         },
       }
 
