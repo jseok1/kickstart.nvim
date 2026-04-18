@@ -858,6 +858,9 @@ require('lazy').setup({
         },
         clangd = {},
         pyright = {},
+        rust_analyzer = {
+          cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
+        },
         ts_ls = {},
         svelte = {},
       }
@@ -1109,6 +1112,8 @@ require('lazy').setup({
       vim.g.gruvbox_material_disable_italic_comment = true
       vim.g.gruvbox_material_visual = 'green background'
 
+      -- vim.g.gruvbox_material_transparent_background = 2
+
       vim.o.background = 'dark'
       vim.cmd.colorscheme 'gruvbox-material'
     end,
@@ -1303,6 +1308,7 @@ require('lazy').setup({
         aux_dir = 'build',
         out_dir = 'build',
       }
+      vim.g.vimtex_quickfix_open_on_warning = 0
 
       -- vim.keymap.set('n', '<Leader>p', '<cmd>!zathura <C-r>=expand("%:r")<CR>.pdf $<CR>')
     end,
