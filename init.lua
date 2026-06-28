@@ -861,6 +861,7 @@ require('lazy').setup({
         rust_analyzer = {
           cmd = { 'rustup', 'run', 'stable', 'rust-analyzer' },
         },
+        ols = {},
         ts_ls = {},
         svelte = {},
       }
@@ -884,7 +885,6 @@ require('lazy').setup({
         'prettierd',
         'prettier',
         'ruff',
-        'ruff-lsp',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -1103,21 +1103,21 @@ require('lazy').setup({
   --   end,
   -- },
 
-  {
-    'sainnhe/gruvbox-material',
-    priority = 1000,
-    config = function()
-      vim.g.gruvbox_material_background = 'soft'
-      vim.g.gruvbox_material_enable_italic = false
-      vim.g.gruvbox_material_disable_italic_comment = true
-      vim.g.gruvbox_material_visual = 'green background'
-
-      -- vim.g.gruvbox_material_transparent_background = 2
-
-      vim.o.background = 'dark'
-      vim.cmd.colorscheme 'gruvbox-material'
-    end,
-  },
+  -- {
+  --   'sainnhe/gruvbox-material',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.g.gruvbox_material_background = 'soft'
+  --     vim.g.gruvbox_material_enable_italic = false
+  --     vim.g.gruvbox_material_disable_italic_comment = true
+  --     vim.g.gruvbox_material_visual = 'green background'
+  --
+  --     -- vim.g.gruvbox_material_transparent_background = 2
+  --
+  --     vim.o.background = 'dark'
+  --     vim.cmd.colorscheme 'gruvbox-material'
+  --   end,
+  -- },
 
   -- {
   --   'sainnhe/everforest',
@@ -1144,20 +1144,20 @@ require('lazy').setup({
   --   end,
   -- },
 
-  -- {
-  --   'catppuccin/nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     require('catppuccin').setup {
-  --       flavour = 'frappe',
-  --       no_italic = true,
-  --       no_bold = true,
-  --       no_underline = true,
-  --     }
-  --
-  --     vim.cmd.colorscheme 'catppuccin'
-  --   end,
-  -- },
+  {
+    'catppuccin/nvim',
+    priority = 1000,
+    config = function()
+      require('catppuccin').setup {
+        flavour = 'frappe',
+        no_italic = true,
+        no_bold = true,
+        no_underline = true,
+      }
+
+      vim.cmd.colorscheme 'catppuccin'
+    end,
+  },
 
   -- Line length marker (custom)
   {
@@ -1224,7 +1224,7 @@ require('lazy').setup({
       require('lualine').setup {
         options = {
           icons_enabled = false,
-          theme = 'gruvbox-material', -- nord, everforest, gruvbox-material
+          theme = 'catppuccin-frappe', -- nord, gruvbox-material, everforest
           section_separators = { left = '', right = '' },
           component_separators = ' ',
           globalstatus = true,
